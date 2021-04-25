@@ -1,0 +1,46 @@
+name: CI
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      WORKSPASE = ${{github.workspace}}
+#      GOOGLE_TEST_DIR: googletest
+
+    steps:
+    
+      - uses: actions/checkout@v1
+  
+  
+      - name: Gtest
+        run: git clone https://github.com/google/googletest ${{github.workspace}}/task5/3rdparty/googletest
+
+
+      - name: Build
+        uses: ashutoshvarma/action-cmake-build@master
+        with:
+          run-test: false
+          install-build: true
+          build-dir: ${{github.workspace}}/task5/build
+          source-dir: ${{github.workspace}}/task5
+          configure-options: -DCMAKE_INSTALL_PREFIX=./inst/
+          build-type: Release
+  
+  
+      - name: Test
+        uses: akhtyamovpavel/ActionGtestReport@v0.0.9
+        with:
+          working-directory: "task5"
+          report-path: "report.xml"
+          exec-path: "bin/CTestExe"
+
+
+      - name: UploadArtifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Distributive
+          path: ${{github.workspace}}/inst/exe
