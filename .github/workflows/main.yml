@@ -24,20 +24,20 @@ jobs:
       - name: Build
         uses: ashutoshvarma/action-cmake-build@master
         with:
-          run-test: false
-          install-build: true
           build-dir: ${{github.workspace}}/task5/build
           source-dir: ${{github.workspace}}/task5
           configure-options: -DCMAKE_INSTALL_PREFIX=./inst/
           build-type: Release
+          run-test: false
+          install-build: true
   
   
       - name: Test
         uses: akhtyamovpavel/ActionGtestReport@v0.0.9
         with:
-          working-directory: "task5"
-          report-path: "report.xml"
           exec-path: "bin/CTestExe"
+          report-path: "report.xml"
+          working-directory: "task5"
 
 
       - name: UploadArtifacts
